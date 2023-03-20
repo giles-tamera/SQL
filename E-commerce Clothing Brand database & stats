@@ -1,0 +1,28 @@
+--Create a store database: Online Clothing Store FWM
+
+CREATE TABLE FWM (id INTEGER PRIMARY KEY, name TEXT, size TEXT, price INTEGER, num_sold INTEGER);
+
+INSERT INTO FWM VALUES
+(1, 'black', 'large', 20, 10),
+(2, 'white', 'medium', 20, 8),
+(3, 'orange', 'small', 22, 9),
+(4, 'yellow', 'medium', 25, 6),
+(5, 'pink', 'large', 23, 7);
+
+--Table displaying all data from the online store
+SELECT * FROM FWM;
+
+--Display the database with items ordered by price
+SELECT * FROM FWM
+ORDER BY price;
+
+--Which products from the store have sold at least 8 times or more?
+SELECT * FROM FWM 
+WHERE num_sold>=8
+GROUP BY num_sold;
+
+--What are the top 3 bestsellers from the store?
+SELECT name, num_sold, price
+FROM fwm
+ORDER BY num_sold desc
+limit 3;
