@@ -1,0 +1,77 @@
+--How many teams total are in this database?
+SELECT 
+    COUNT(DISTINCT team) AS total_teams
+FROM players;
+
+--List each team in this database.
+SELECT DISTINCT
+    team AS All_teams
+FROM players
+ORDER BY team ASC;
+
+/*2008 is when the modern nba division was established, which is made up of the 30 teams active today. 
+Which teams belong to what division? Use case to find out what division each team in this database belongs to.*/
+SELECT DISTINCT
+    team,
+    CASE
+        WHEN team IN("Boston Celtics", "Brooklyn Nets", "New York Knicks", "Philadelphia Sixers", "Toronto Raptors") THEN "Atlantic Division"
+        WHEN team IN("Cleveland Cavaliers", "Chicago Bulls", "Detroit Pistons", "Idiana Pacers", "Milwaukee Bucks") THEN "Central Division"
+        WHEN team IN("Atlanta Hawks", "Charlotte Hornets", "Miami Heat", "Orlando Magic", "Washington Wizards") THEN "Southeast Division"
+        WHEN team IN("Denver Nuggets", "Minnesota Timberwolves", "Portland Trail Blazers", "Oklahoma City Thunder", "Utah Jazz") THEN "Northwest Division" 
+        WHEN team IN("Golden State Warriors", "Los Angeles Clippers", "Los Angeles Lakers", "Pheonix Suns", "Sacramento Kings") THEN "Pacific Division"
+        WHEN team IN("Dallas Mavericks", "Houston Rockets", "Memphis Grizzlies", "New Orleans Pelicans", "San Antonio Spurs") THEN "Southwest Division"
+    ELSE "pre_modern_divisions"
+    END AS Division
+FROM players
+ORDER BY Division ASC;
+
+--Are/were there any other players in this database as huge as Shaq? He's 7'1 and 324 lbs according to Google. 
+SELECT DISTINCT 
+    player,
+    height,
+    weight
+FROM players
+WHERE height > "7''1" 
+    OR weight > 324
+ORDER BY height DESC;
+--Height wise, yes.
+
+--What is the average height of players over the age of 35 in this dataset?
+SELECT 
+    age, 
+    AVG(height) AS avg_height_ft
+FROM players 
+WHERE age >34
+GROUP BY age
+ORDER BY age ASC;
+
+--Find all players in this database who have been played in the league for 10 years or more.
+SELECT
+    player,
+    seasons_in_league
+FROM players
+GROUP BY player
+HAVING seasons_in_league >= 10
+ORDER BY seasons_in_league DESC;
+
+--What are the average heights of each position in this database?
+SELECT 
+    position,
+    AVG(height) AS avg_height
+FROM players
+GROUP BY position
+ORDER BY height ASC;
+
+/*Let's find out who the rare young talents are, and the vets who played beyond their youth. 
+Output players who are 20 and younger and players who are 40 and over.*/
+SELECT DISTINCT
+    player,
+    age
+FROM players
+WHERE age >39 AND age <20;
+
+--What are the minimum and maximum heights recorded in this database?
+SELECT 
+    MIN(height),
+    MAX(height)
+FROM players;
