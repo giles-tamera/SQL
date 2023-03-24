@@ -1,0 +1,122 @@
+/**Create 2 or more tables about your choice of celebrities and what they do. At least one of your tables must 
+contain a column that relates to the primary key of another table.**/
+
+CREATE TABLE singers 
+(id INTEGER PRIMARY KEY,artist TEXT, genre TEXT, music_group TEXT);
+    
+INSERT INTO singers VALUES 
+    (1,"Kelly Rowland", "r&b", "Destiny's Child"),
+    (2, "Whitney Houston", "r&b", NULL),
+    (3, "Beyonce", "r&b", "Destiny's Child"),
+    (4, "Jennifer Hudson", "r&b", NULL),
+    (5, "Faith Evans", "r&b", "Bad Boy"),
+    (6, "Alicia Keys", "r&b", NULL),
+    (7, "Tamela Mann", "gospel", "Kirk Franklin & the family"),
+    (8, "Bobby Brown", "r&b", "New Edition"),
+    (9, "Eddie Levert", "soul", "ojays"),
+    (10, "Walter Williams Sr", "soul", "ojays"),
+    (11, "Eric Grant", "soul", "ojays");
+    
+CREATE TABLE songs 
+    (id INTEGER PRIMARY KEY, title TEXT, artist TEXT, genre TEXT);
+    
+INSERT INTO songs VALUES
+    (1, "I love music", "ojays", "soul"),
+    (2, "Why we sing", "Kirk Franklin & The Family", "gospel"),
+    (3, "You", "Bad Boy", "Hiphop"),
+    (4, "Every little step", "Bobby Brown", "pop"),
+    (5, "You give good love", "Whitney Houston", "r&b"),
+    (6, "Bills, bills, bills", "Destiny's Child", "pop"),
+    (7, "God provides", "Tamela Mann", "gospel"),
+    (8, "A woman's worth", "Alicia Keys", "r&b"),
+    (9, "Spotlight", "Jennifer Hudson", "r&b"),
+    (10, "Baby boy", "Beyonce", "r&b");
+    
+CREATE TABLE movies (id INTEGER PRIMARY KEY, title TEXT, character TEXT, genre TEXT);    
+
+INSERT INTO movies VALUES
+    (1, "The fighting temptations", "Beyonce", "comedy"),
+    (2, "The fighting temptations", "Faith Evans", "comedy"),
+    (3, "The fighting temptations", "Eddie Levert", "comedy"),
+    (4, "The fighting temptations", "Walter Williams Sr", "comedy"),
+    (5, "The fighting temptations", "Eric   Grant", "comedy"),
+    (6, "Dreamgirls", "Beyonce", "drama"),
+    (7, "Dreamgirls", "Jennifer Hudson", "drama"),
+    (8, "Secret life of bees", "Jennifer    Hudson", "drama"),
+    (9, "Secret life of bees", "Alicia Keys", "drama"),
+    (10, "Thin line between love & hate", "Bobby Brown", "drama"),
+    (11, "Bad boys", "Will Smith", "action"),
+    (12, "Waiting to exhale", "Whitney Houston", "romance"),
+    (13, "Madea goes to jail", "Tyler Perry", "comedy"),
+    (14, "Madea goes to jail", "Tamela Mann", "comedy"),
+    (15, "Phat girlz", "Monique", "comedy");
+    
+
+/**Create a table displaying all artist names & the group they belong to. List all artist names whether they belong to a group or not.**/
+
+/*I'm going to use a self join function with the unique identifier of each artist in the singers table to create 
+a list matching every artist to their applicable group.*/
+
+SELECT
+    A.artist, B.music_group
+FROM 
+    singers A
+JOIN
+    singers B
+ON
+    A.id = B.id;
+    
+
+/**Link the artist names that are a group from table 1 songs they wrote in table 2.**/ 
+
+/*I'm going to use a JOIN function with the group's name in common to link the singers table to the songs table to find out
+what _groups_ wrote a song in this database.*/
+
+SELECT
+    singers.music_group, songs.title AS song_title
+FROM
+    singers
+JOIN
+    songs
+ON
+    singers.music_group=songs.artist
+GROUP BY 
+    singers.music_group
+ORDER BY
+    singers.music_group ASC;
+
+
+/**Create a table that lists the singers that acted in a movie AND who wrote a pop OR gospel 
+song listed in this database.**/
+
+/*I'm going to use a JOIN function to relate the singers table to the movies table (with the artist/actor's name in common), in
+order to see who wrote a gospel or pop song in this database & also acted in a 
+movie in this database.*/
+
+SELECT 
+    songs.artist, songs.title AS song_title, songs.genre, movies.title AS movie_title
+FROM
+    songs
+JOIN
+    movies
+ON
+    songs.artist=movies.character
+WHERE 
+    songs.genre IN("pop", "gospel");
+    
+
+/**List the songs by singers in this database that DO NOT match the artist's genre.**/
+
+/*I'm going to use a JOIN funtion to join the singers table to the songs table with the common column being the artist name, 
+to list the songs that artist created that **do not** fall under their genre. This will expose artists in this database that have _layers_.*/  
+
+SELECT
+    singers.artist, singers.genre AS artist_genre, songs.genre AS song_genre
+FROM
+    singers
+JOIN
+    songs
+ON
+    singers.artist = songs.artist
+WHERE 
+    singers.genre != songs.genre; 
